@@ -8,8 +8,8 @@
         <div class="headTopLeft">
           <h5>尚品汇欢迎您！&nbsp;请</h5>
           <p>
-            <a href="javascript:;">登录</a>
-            <a href="javascript:;">免费注册</a>
+            <router-link to="/login">登录</router-link>
+            <router-link to="/register">免费注册</router-link>
           </p>
         </div>
         <!-- 右边 -->
@@ -34,14 +34,14 @@
       <div class="headBottomMain">
         <!-- logo -->
         <h1>
-          <a href="javascript:;">
+          <router-link to="/home">
             <img src="@/assets/images/logo.png">
-          </a>
+          </router-link>
         </h1>
         <!-- 搜索 -->
         <div class="search">
           <input type="text" placeholder="请输入搜索内容">
-          <input type="submit" value="搜索">
+          <input type="submit" value="搜索" @click="handleSearch">
         </div>
       </div>
     </div>
@@ -49,7 +49,16 @@
 </template>
 
 <script>
-
+export default {
+  name: '',
+  methods: {
+    handleSearch() {
+      this.$router.push({
+        path: '/search'
+      })
+    }
+  }
+}
 </script>
 
 <style scoped lang="less">
