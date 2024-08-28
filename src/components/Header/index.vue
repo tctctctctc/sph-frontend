@@ -40,7 +40,7 @@
         </h1>
         <!-- 搜索 -->
         <div class="search">
-          <input type="text" placeholder="请输入搜索内容">
+          <input v-model="keyword" type="text" placeholder="请输入搜索内容">
           <input type="submit" value="搜索" @click="handleSearch">
         </div>
       </div>
@@ -51,10 +51,18 @@
 <script>
 export default {
   name: '',
+  data() {
+    return {
+      keyword: ''
+    }
+  },
   methods: {
     handleSearch() {
       this.$router.push({
-        path: '/search'
+        path: 'search',
+        query: {
+          key: this.keyword
+        }
       })
     }
   }
