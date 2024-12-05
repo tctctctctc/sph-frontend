@@ -1,9 +1,15 @@
 <template>
-  <div>我是首页</div>
+  <!-- 商品分类 -->
+  <product-classification />
 </template>
 
 <script>
+import ProductClassification from "@/components/ProductClassification/index.vue";
+
 export default {
-  name: 'HomeVue',
-}
+  name: "HomeVue",
+  components: {
+    ProductClassification,
+  },
+};
 </script>
