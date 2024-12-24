@@ -21,36 +21,23 @@
       <div class="main-content">
         <!-- 左侧nav列表 -->
         <div class="left-panel">
-          <div class="item">
-            <a href="javascript:;">图书、音像、数字商品</a>
+          <div
+            class="item"
+            v-for="category in categoryList"
+            :key="category.categoryId"
+          >
+            <a href="javascript:;">{{ category.categoryName }}</a>
             <!-- 右侧详情面板，鼠标悬浮显示 -->
             <div class="right-panel">
-              <dl>
-                <dt><a href="javascript:;">电子书</a></dt>
-                <dd><a href="javascript:;">婚恋/两性</a></dd>
-                <dd><a href="javascript:;">文学</a></dd>
-                <dd><a href="javascript:;">经管</a></dd>
-                <dd><a href="javascript:;">畅读VIP</a></dd>
-              </dl>
-            </div>
-          </div>
-          <div class="item">
-            <a href="javascript:;">家用电器</a>
-            <div class="right-panel">
-              <dl>
-                <dt><a href="javascript:;">音像</a></dt>
-                <dd><a href="javascript:;">v音乐</a></dd>
-                <dd><a href="javascript:;">影视</a></dd>
-                <dd><a href="javascript:;">教育音像</a></dd>
-                <dd><a href="javascript:;">游戏</a></dd>
-              </dl>
-              <dl>
-                <dt><a href="javascript:;">文艺</a></dt>
-                <dd><a href="javascript:;">小说</a></dd>
-                <dd><a href="javascript:;">文学</a></dd>
-                <dd><a href="javascript:;">青春文学</a></dd>
-                <dd><a href="javascript:;">传记</a></dd>
-                <dd><a href="javascript:;">艺术</a></dd>
+              <dl v-for="item in category.categoryChild" :key="item.categoryId">
+                <dt>
+                  <a href="javascript:;">{{ item.categoryName }}</a>
+                </dt>
+                <dd>
+                  <em v-for="c in item.categoryChild" :key="c.categoryId">
+                    <a href="javascript:;">{{ c.categoryName }}</a>
+                  </em>
+                </dd>
               </dl>
             </div>
           </div>
@@ -61,8 +48,18 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "ProductClassification",
+  mounted() {
+    this.$store.dispatch("generateCategoryList");
+  },
+  computed: {
+    ...mapState({
+      categoryList: (state) => state.home.categoryList,
+    }),
+  },
 };
 </script>
 
@@ -106,9 +103,9 @@ export default {
         background-color: #fafafa;
 
         .item {
-          a {
-            line-height: 30px;
-            font-size: 14px;
+          > a {
+            line-height: 25px;
+            font-size: 12px;
             font-weight: 400;
             padding: 0 20px;
             overflow: hidden;
@@ -123,31 +120,46 @@ export default {
             background-color: #f7f7f7;
             width: 714px;
             min-height: 460px;
-            padding: 0 20px;
+            padding: 0 10px;
             visibility: hidden;
 
             dl {
               display: flex;
               margin-top: 10px;
-              font-size: 12px;
+              zoom: 1;
 
               dt {
+                height: 22px;
+                line-height: 22px;
+                width: 54px;
+                text-align: right;
+                padding: 0 10px;
+
                 a {
                   font-weight: 700;
                   text-decoration: none;
                   color: #333;
-                  height: 22px;
-                  line-height: 22px;
+                  font-size: 12px;
                 }
               }
 
               dd {
-                border-left: 1px solid #ccc;
-                a {
+                display: flex;
+                flex-wrap: wrap;
+                width: 650px;
+
+                em {
+                  border-left: 1px solid #ccc;
                   height: 22px;
                   line-height: 22px;
-                  text-decoration: none;
-                  color: #666;
+                  margin-bottom: 5px;
+
+                  a {
+                    text-decoration: none;
+                    color: #666;
+                    font-size: 12px;
+                    padding: 0 10px;
+                  }
                 }
               }
             }
