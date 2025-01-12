@@ -1,9 +1,14 @@
 <template>
-  <div>我是搜索</div>
+  <product-classification />
 </template>
 
 <script>
+import ProductClassification from "@/components/ProductClassification/index.vue";
+
 export default {
-  name: 'SearchVue',
-}
+  name: "SearchVue",
+  components: {
+    ProductClassification,
+  },
+};
 </script>

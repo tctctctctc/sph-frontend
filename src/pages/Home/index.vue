@@ -1,6 +1,6 @@
 <template>
   <!-- 商品分类 -->
-  <product-classification />
+  <product-classification :fixedDisplay="true" />
 </template>
 
 <script>

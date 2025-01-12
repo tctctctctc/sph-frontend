@@ -4,7 +4,11 @@
     <div class="type-area">
       <!-- 顶部导航 -->
       <div class="header">
-        <em>全部商品分类</em>
+        <em
+          @mouseenter="visible = true"
+          @mouseleave="visible = fixedDisplay || false"
+          >全部商品分类</em
+        >
         <nav>
           <a href="javascript:;">服装城</a>
           <a href="javascript:;">美妆城</a>
@@ -19,35 +23,47 @@
 
       <!-- 底部商品分类明细 -->
       <div class="main-content">
-        <!-- 左侧nav列表 -->
-        <div class="left-panel" @click="onSearch">
+        <!-- 过渡动画 -->
+        <transition name="nav">
+          <!-- 左侧nav列表 -->
           <div
-            class="item"
-            v-for="category in categoryList"
-            :key="category.categoryId"
+            class="left-panel"
+            @click="onSearch"
+            v-show="visible"
+            @mouseenter="visible = true"
+            @mouseleave="visible = fixedDisplay || false"
           >
-            <a
-              href="javascript:;"
-              :data-categoryName="category.categoryName"
-              :data-category1Id="category.categoryId"
+            <div
+              class="item"
+              v-for="category in categoryList"
+              :key="category.categoryId"
             >
-              {{ category.categoryName }}
-            </a>
-            <!-- 右侧详情面板，鼠标悬浮显示 -->
-            <div class="right-panel">
-              <dl v-for="item in category.categoryChild" :key="item.categoryId">
-                <dt>
-                  <a href="javascript:;">{{ item.categoryName }}</a>
-                </dt>
-                <dd>
-                  <em v-for="c in item.categoryChild" :key="c.categoryId">
-                    <a href="javascript:;">{{ c.categoryName }}</a>
-                  </em>
-                </dd>
-              </dl>
+              <a
+                href="javascript:;"
+                :data-categoryName="category.categoryName"
+                :data-category1Id="category.categoryId"
+              >
+                {{ category.categoryName }}
+              </a>
+              <!-- 右侧详情面板，鼠标悬浮显示 -->
+              <div class="right-panel">
+                <dl
+                  v-for="item in category.categoryChild"
+                  :key="item.categoryId"
+                >
+                  <dt>
+                    <a href="javascript:;">{{ item.categoryName }}</a>
+                  </dt>
+                  <dd>
+                    <em v-for="c in item.categoryChild" :key="c.categoryId">
+                      <a href="javascript:;">{{ c.categoryName }}</a>
+                    </em>
+                  </dd>
+                </dl>
+              </div>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
     </div>
   </div>
@@ -58,8 +74,17 @@ import { mapState } from "vuex";
 
 export default {
   name: "ProductClassification",
-  mounted() {
-    this.$store.dispatch("generateCategoryList");
+  data() {
+    return {
+      visible: false,
+    };
+  },
+  props: {
+    /** 是否固定显示 */
+    fixedDisplay: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     ...mapState({
@@ -96,6 +121,13 @@ export default {
       }
     },
   },
+  mounted() {
+    // 请求三级联动导航数据
+    this.$store.dispatch("generateCategoryList");
+    if (this.fixedDisplay) {
+      this.visible = true;
+    }
+  },
 };
 </script>
 
@@ -131,6 +163,21 @@ export default {
 
     .main-content {
       position: relative;
+
+      // 过渡动画开始进入
+      .nav-enter {
+        height: 0 !important;
+      }
+      // 过渡动画结束进入
+      .nav-enter-to {
+        height: 460px !important;
+        overflow: initial;
+      }
+      // 过渡动画进入中
+      .nav-enter-active {
+        transition: all 0.5s linear;
+        overflow: hidden;
+      }
 
       .left-panel {
         position: absolute;
