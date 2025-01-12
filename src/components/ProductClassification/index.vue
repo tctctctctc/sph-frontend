@@ -20,13 +20,19 @@
       <!-- 底部商品分类明细 -->
       <div class="main-content">
         <!-- 左侧nav列表 -->
-        <div class="left-panel">
+        <div class="left-panel" @click="onSearch">
           <div
             class="item"
             v-for="category in categoryList"
             :key="category.categoryId"
           >
-            <a href="javascript:;">{{ category.categoryName }}</a>
+            <a
+              href="javascript:;"
+              :data-categoryName="category.categoryName"
+              :data-category1Id="category.categoryId"
+            >
+              {{ category.categoryName }}
+            </a>
             <!-- 右侧详情面板，鼠标悬浮显示 -->
             <div class="right-panel">
               <dl v-for="item in category.categoryChild" :key="item.categoryId">
@@ -59,6 +65,36 @@ export default {
     ...mapState({
       categoryList: (state) => state.home.categoryList,
     }),
+  },
+  methods: {
+    /**
+     * 点击三级联动导航项跳转
+     */
+    onSearch(event) {
+      let element = event.target;
+      const {
+        categoryname: categoryName,
+        category1id: category1Id,
+        category2id: category2Id,
+        category3id: category3Id,
+      } = element.dataset;
+      if (categoryName) {
+        const query = {
+          categoryName,
+        };
+        if (category1Id) {
+          query.category1Id = category1Id;
+        } else if (category2Id) {
+          query.category1Id = category2Id;
+        } else if (category3Id) {
+          query.category3Id = category3Id;
+        }
+        this.$router.push({
+          path: "/search",
+          query,
+        });
+      }
+    },
   },
 };
 </script>
