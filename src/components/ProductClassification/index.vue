@@ -4,11 +4,7 @@
     <div class="type-area">
       <!-- 顶部导航 -->
       <div class="header">
-        <em
-          @mouseenter="visible = true"
-          @mouseleave="visible = fixedDisplay || false"
-          >全部商品分类</em
-        >
+        <em @mouseenter="visible = true" @mouseleave="visible = fixedDisplay || false">全部商品分类</em>
         <nav>
           <a href="javascript:;">服装城</a>
           <a href="javascript:;">美妆城</a>
@@ -26,37 +22,24 @@
         <!-- 过渡动画 -->
         <transition name="nav">
           <!-- 左侧nav列表 -->
-          <div
-            class="left-panel"
-            @click="onSearch"
-            v-show="visible"
-            @mouseenter="visible = true"
-            @mouseleave="visible = fixedDisplay || false"
-          >
-            <div
-              class="item"
-              v-for="category in categoryList"
-              :key="category.categoryId"
-            >
-              <a
-                href="javascript:;"
-                :data-categoryName="category.categoryName"
-                :data-category1Id="category.categoryId"
-              >
+          <div class="left-panel" @click="onSearch" v-show="visible" @mouseenter="visible = true"
+            @mouseleave="visible = fixedDisplay || false">
+            <div class="item" v-for="category in categoryList" :key="category.categoryId">
+              <a href="javascript:;" :data-categoryName="category.categoryName" :data-category1Id="category.categoryId">
                 {{ category.categoryName }}
               </a>
               <!-- 右侧详情面板，鼠标悬浮显示 -->
               <div class="right-panel">
-                <dl
-                  v-for="item in category.categoryChild"
-                  :key="item.categoryId"
-                >
+                <dl v-for="item in category.categoryChild" :key="item.categoryId">
                   <dt>
-                    <a href="javascript:;">{{ item.categoryName }}</a>
+                    <a href="javascript:;" :data-categoryName="item.categoryName" :data-category2Id="item.categoryId">
+                      {{ item.categoryName }}
+                    </a>
                   </dt>
                   <dd>
                     <em v-for="c in item.categoryChild" :key="c.categoryId">
-                      <a href="javascript:;">{{ c.categoryName }}</a>
+                      <a href="javascript:;" :data-categoryName="c.categoryName" :data-category3Id="c.categoryId">{{
+                        c.categoryName }}</a>
                     </em>
                   </dd>
                 </dl>
@@ -110,20 +93,20 @@ export default {
         if (category1Id) {
           query.category1Id = category1Id;
         } else if (category2Id) {
-          query.category1Id = category2Id;
+          query.category2Id = category2Id;
         } else if (category3Id) {
           query.category3Id = category3Id;
         }
+
         this.$router.push({
-          path: "/search",
+          name: "search",
           query,
+          params: this.$route.params
         });
       }
     },
   },
   mounted() {
-    // 请求三级联动导航数据
-    this.$store.dispatch("generateCategoryList");
     if (this.fixedDisplay) {
       this.visible = true;
     }
@@ -168,11 +151,13 @@ export default {
       .nav-enter {
         height: 0 !important;
       }
+
       // 过渡动画结束进入
       .nav-enter-to {
         height: 460px !important;
         overflow: initial;
       }
+
       // 过渡动画进入中
       .nav-enter-active {
         transition: all 0.5s linear;
@@ -186,7 +171,7 @@ export default {
         background-color: #fafafa;
 
         .item {
-          > a {
+          >a {
             line-height: 25px;
             font-size: 12px;
             font-weight: 400;

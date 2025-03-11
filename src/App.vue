@@ -15,6 +15,10 @@ export default {
   components: {
     Header,
     Footer
+  },
+  mounted() {
+    // 请求三级联动导航数据
+    this.$store.dispatch("generateCategoryList");
   }
 }
 </script>

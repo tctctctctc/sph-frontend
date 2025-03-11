@@ -40,8 +40,8 @@
         </h1>
         <!-- 搜索 -->
         <div class="search">
-          <input type="text" placeholder="请输入搜索内容">
-          <input type="submit" value="搜索" @click="handleSearch">
+          <input type="text" placeholder="请输入搜索内容" v-model="keywords">
+          <button @click="handleSearch">搜索</button>
         </div>
       </div>
     </div>
@@ -50,11 +50,20 @@
 
 <script>
 export default {
-  name: '',
+  name: 'BaseHeader',
+  data() {
+    return {
+      keywords: ''
+    }
+  },
   methods: {
     handleSearch() {
       this.$router.push({
-        path: '/search'
+        name: 'search',
+        params: {
+          keywords: this.keywords
+        },
+        query: this.$route.query
       })
     }
   }
@@ -80,6 +89,7 @@ export default {
         a {
           margin-right: 5px;
         }
+
         a:first-child {
           border-right: 1px solid #b3aeae;
           padding-right: 5px;
@@ -93,6 +103,7 @@ export default {
           margin-left: 10px;
           padding-right: 10px;
           border-right: 1px solid #b3aeae;
+
           &:last-child {
             border: none;
             padding-right: 0;
@@ -120,25 +131,30 @@ export default {
 
     .search {
       margin-top: 35px;
+
       input {
         height: 32px;
+
         &:first-child {
           width: 490px;
           padding: 0 4px;
           border: 3px solid #ea4a46;
           box-sizing: border-box;
         }
-        &:last-child {
-          width: 68px;
-          background: #ea4a36;
-          color: #fff;
-          cursor: pointer;
-          border: none;
-        }
+
         // 修饰 placeholder
         &::-webkit-input-placeholder {
           color: yellowgreen;
         }
+      }
+
+      button {
+        height: 32px;
+        width: 68px;
+        background: #ea4a36;
+        color: #fff;
+        cursor: pointer;
+        border: none;
       }
     }
   }
